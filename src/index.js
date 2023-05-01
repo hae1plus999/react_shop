@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import './index.css';
 import App from './App';
 import Home from './pages/Home';
@@ -12,44 +12,40 @@ import NotFound from './pages/NotFound';
 import reportWebVitals from './reportWebVitals';
 import ProtectedRoute from './pages/ProtectedRoute';
 
-const router = createBrowserRouter([{
+const router = createBrowserRouter([
+  {
     path: '/',
-    element: < App / > ,
-    errorElement: < NotFound / > ,
+    element: <App />,
+    errorElement: <NotFound />,
     children: [
-        { index: true, path: '/', element: < Home / > },
-        { path: '/products', element: < AllProducts / > },
-        {
-            path: '/products/new',
-            element: ( <
-                ProtectedRoute requireAdmin >
-                <
-                NewProduct / >
-                <
-                /ProtectedRoute>
-            )
-        },
-        { path: '/product/:id', element: < ProductDetail / > },
-        {
-            path: '/carts',
-            element: ( <
-                ProtectedRoute >
-                <
-                MyCart / >
-                <
-                /ProtectedRoute>
-            )
-        },
+      {index: true, path: '/', element: <Home />},
+      {path: '/products', element: <AllProducts />},
+      {
+        path: '/products/new', 
+        element: (
+          <ProtectedRoute requireAdmin>
+            <NewProduct />
+          </ProtectedRoute>
+        )
+      },
+      {path: '/product/:id', element: <ProductDetail />},
+      {
+        path: '/carts', 
+        element: (
+          <ProtectedRoute>
+            <MyCart />
+          </ProtectedRoute>
+          )
+      },
     ],
-}, ]);
+  },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render( <
-    React.StrictMode >
-    <
-    RouterProvider router = { router }
-    /> <
-    /React.StrictMode>
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
