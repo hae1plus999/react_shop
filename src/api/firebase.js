@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, remove } from "firebase/database";
 import { v4 as uuid } from 'uuid';
 
 const firebaseConfig = {
@@ -18,14 +18,7 @@ const database = getDatabase(app);
 export async function login() {
     return signInWithPopup(auth, provider)
         .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
+            console.log(error);
         });
 }
 
@@ -59,7 +52,7 @@ export async function addNewProduct(product, imageUrl) {
         id,
         price: parseInt(product.price),
         image: imageUrl,
-        option: product.options.split(','),
+        options: product.options.split(','),
     });
 }
 
@@ -70,4 +63,20 @@ export async function getProducts() {
         }
         return [];
     })
+}
+
+export async function getCart(userId) {
+    return get(ref(database, `carts/${userId}`))
+        .then(snapshot => {
+            const items = snapshot.val() || {};
+            return Object.values(items);
+        })
+}
+
+export async function addOrUpdateToCart(userId, product) {
+    return set(ref(database, `carts/${userId}/${product.id}`), product);
+}
+
+export async function removeFromCart(userId, productId) {
+    return remove(ref(database, `carts/${userId}/${productId}`));
 }
